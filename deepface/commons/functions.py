@@ -243,7 +243,7 @@ def preprocess_face(img, target_size=(224, 224), grayscale = False, enforce_dete
 
 	if max_faces == 1:
 		return face_imgs[0]
-	return face_imgs
+	return face_imgs[:max_faces]
 
 def find_input_shape(model):
 
