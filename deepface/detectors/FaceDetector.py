@@ -35,7 +35,7 @@ def build_model(detector_backend):
 def detect_face(face_detector, detector_backend, img, align = True, max_faces = 1):
 
     obj = detect_faces(face_detector, detector_backend, img, align)
-
+    print("max_faces:", max_faces)
     if len(obj) > 0:
         faces = obj[:max_faces] #discard multiple faces
     else: #len(obj) == 0
@@ -61,7 +61,7 @@ def detect_faces(face_detector, detector_backend, img, align = True):
     if detect_face:
         obj = detect_face(face_detector, img, align)
         #obj stores list of detected_face and region pair
-        print("Detect Faces in FaceDetector Line 64 (len(obj), obj): ", len(obj),obj)
+        print("Detect Faces in FaceDetector Line 64 (len(obj)): ", len(obj))
         return obj
     else:
         raise ValueError("invalid detector_backend passed - " + detector_backend)
