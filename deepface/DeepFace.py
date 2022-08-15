@@ -815,9 +815,12 @@ def detectFace(img_path, target_size = (224, 224), detector_backend = 'opencv', 
 	Returns:
 		deteced and aligned face in numpy format
 	"""
-
-	imgs = functions.preprocess_face(img = img_path, target_size = target_size, detector_backend = detector_backend
+	if max_faces == 1:
+		imgs = functions.preprocess_face(img = img_path, target_size = target_size, detector_backend = detector_backend
 		, enforce_detection = enforce_detection, align = align, max_faces = max_faces)[0] #preprocess_face returns (1, 224, 224, 3)
+	else: 
+		imgs = [img[0] for img in functions.preprocess_face(img = img_path, target_size = target_size, detector_backend = detector_backend
+		, enforce_detection = enforce_detection, align = align, max_faces = max_faces)]
 
 	if max_faces == 1:
 		return imgs[:, :, ::-1]
