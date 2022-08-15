@@ -42,7 +42,6 @@ def detect_face(face_detector, detector_backend, img, align = True, max_faces = 
         region = [0, 0, img.shape[0], img.shape[1]]
         faces = [(face, region)]
 
-    print("faces:", len(faces))
 
     return faces
 
