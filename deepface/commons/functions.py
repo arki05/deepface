@@ -115,7 +115,7 @@ def detect_face(img, detector_backend = 'opencv', grayscale = False, enforce_det
 		detected_faces = None
 
 	if detected_faces == None:
-		if enforce_detection != True:
+		if enforce_detection == False:
 			return [(img, img_region)]
 		else:
 			raise ValueError("Face could not be detected. Please confirm that the picture is a face photo or consider to set enforce_detection param to False.")
@@ -177,12 +177,15 @@ def preprocess_face(img, target_size=(224, 224), grayscale = False, enforce_dete
 	# img, region = detect_face(img = img, detector_backend = detector_backend, grayscale = grayscale, enforce_detection = enforce_detection, align = align, max_faces = max_faces)
 	faces = detect_face(img = img, detector_backend = detector_backend, grayscale = grayscale, enforce_detection = enforce_detection, align = align, max_faces = max_faces)
 
-
 	face_imgs = []
 	for img, region in faces:
 
 		#--------------------------
-
+		if img is None:
+			if enforce_detection == True:
+				raise ValueError("Detected face shape is ", img.shape,". Consider to set enforce_detection argument to False.")
+			else: #restore base image
+				img = base_img.copy()
 		if img.shape[0] == 0 or img.shape[1] == 0:
 			if enforce_detection == True:
 				raise ValueError("Detected face shape is ", img.shape,". Consider to set enforce_detection argument to False.")
