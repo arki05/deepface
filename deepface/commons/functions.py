@@ -177,13 +177,15 @@ def preprocess_face(img, target_size=(224, 224), grayscale = False, enforce_dete
 	# img, region = detect_face(img = img, detector_backend = detector_backend, grayscale = grayscale, enforce_detection = enforce_detection, align = align, max_faces = max_faces)
 	faces = detect_face(img = img, detector_backend = detector_backend, grayscale = grayscale, enforce_detection = enforce_detection, align = align, max_faces = max_faces)
 
+	print("Len Faces: ", faces, " max_faces: ", max_faces)
+
 	face_imgs = []
 	for img, region in faces:
 
 		#--------------------------
 		if img is None:
 			if enforce_detection == True:
-				raise ValueError("Detected face shape is ", img.shape,". Consider to set enforce_detection argument to False.")
+				raise ValueError("No face detected ", img,". Consider to set enforce_detection argument to False.")
 			else: #restore base image
 				img = base_img.copy()
 		elif img.shape[0] == 0 or img.shape[1] == 0:
@@ -241,6 +243,7 @@ def preprocess_face(img, target_size=(224, 224), grayscale = False, enforce_dete
 		else:
 			face_imgs.append(img_pixels)
 
+	print("len face_imgs", len(face_imgs), " face_imgs[:max_faces]", face_imgs[:max_faces])
 	if max_faces == 1:
 		return face_imgs[0]
 	return face_imgs[:max_faces]
