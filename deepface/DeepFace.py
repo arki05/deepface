@@ -718,7 +718,7 @@ def find(img_path, db_path, model_name ='VGG-Face', distance_metric = 'cosine', 
 
 	return None
 
-def represent(img_path, model_name = 'VGG-Face', model = None, enforce_detection = True, detector_backend = 'opencv', align = True, normalization = 'base'):
+def represent(img_path, model_name = 'VGG-Face', model = None, enforce_detection = True, detector_backend = 'opencv', align = True, normalization = 'base', max_faces = 1, return_detected_faces = False):
 
 	"""
 	This function represents facial images as vectors.
@@ -751,23 +751,31 @@ def represent(img_path, model_name = 'VGG-Face', model = None, enforce_detection
 	input_shape_x, input_shape_y = functions.find_input_shape(model)
 
 	#detect and align
-	img = functions.preprocess_face(img = img_path
+	imgs = functions.preprocess_face(img = img_path
 		, target_size=(input_shape_y, input_shape_x)
 		, enforce_detection = enforce_detection
 		, detector_backend = detector_backend
-		, align = align)
+		, align = align, max_faces=max_faces)
 
 	#---------------------------------
 	#custom normalization
+	if max_faces == 1:
+		imgs = [imgs]
+	embeddings = []
+	for img in imgs:
+	 
+		norm_img = functions.normalize_input(img = img, normalization = normalization)
 
-	img = functions.normalize_input(img = img, normalization = normalization)
+		#---------------------------------
 
-	#---------------------------------
-
-	#represent
-	embedding = model.predict(img)[0].tolist()
-
-	return embedding
+		#represent
+		if return_detected_faces:
+			embeddings.append((model.predict(norm_img)[0].tolist(), img))
+		else:
+			embeddings.append(model.predict(norm_img)[0].tolist())
+	if max_faces == 1:
+		return embeddings[0]
+	return embeddings
 
 def stream(db_path = '', model_name ='VGG-Face', detector_backend = 'opencv', distance_metric = 'cosine', enable_face_analysis = True, source = 0, time_threshold = 5, frame_threshold = 5):
 
