@@ -757,6 +757,8 @@ def represent(img_path, model_name = 'VGG-Face', model = None, enforce_detection
 		, detector_backend = detector_backend
 		, align = align, max_faces=max_faces, return_region=return_region)
 
+	if imgs is None:
+		return None
 	#---------------------------------
 	#custom normalization
 	if max_faces == 1:

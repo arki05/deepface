@@ -186,12 +186,12 @@ def preprocess_face(img, target_size=(224, 224), grayscale = False, enforce_dete
 			if enforce_detection == True:
 				raise ValueError("No face detected ", img,". Consider to set enforce_detection argument to False.")
 			else: #restore base image
-				img = base_img.copy()
+				return None
 		elif img.shape[0] == 0 or img.shape[1] == 0:
 			if enforce_detection == True:
 				raise ValueError("Detected face shape is ", img.shape,". Consider to set enforce_detection argument to False.")
 			else: #restore base image
-				img = base_img.copy()
+				return None
 
 		#--------------------------
 
